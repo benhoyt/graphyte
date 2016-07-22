@@ -7,6 +7,11 @@ support Python 3, and it also required gevent for asyncronous use. graphyte
 is compatible with Python 3.4+ as well as Python 2.7, and uses the standard
 library's `threading` module for asynchronous use.
 
+The library is on the Python Package Index (PyPI), so to install it, fire up a
+command prompt, activate your virtualenv if you're using one, and type:
+
+    pip install graphyte
+
 Using graphyte is simple -- just call `init()` to initialize the default
 sender and then `send()` to send a message. For example, to send
 `system.sync.foo.bar 42 {timestamp}\n` to graphite.example.com:2003
