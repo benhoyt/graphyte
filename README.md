@@ -7,7 +7,7 @@ support Python 3, and it also required gevent for asyncronous use.
 
 Using graphyte is simple -- just call `init()` to initialize the default
 sender and then `send()` to send a message. For example, to send
-`system.sync.foo.bar 42 {timestamp}` to graphite.example.com:2003
+`system.sync.foo.bar 42 {timestamp}\n` to graphite.example.com:2003
 synchronously:
 
 ```python
