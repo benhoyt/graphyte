@@ -47,9 +47,9 @@ class CustomSender(graphyte.Sender):
         print('Sending bytes in some custom way: {!r}'.format(message))
 ```
 
-Socket sending errors are logged using the Python logging system (logged name
-"graphyte"). If the sender is initialized with `log_sends=True`, all sends are
-logged at the INFO level.
+Socket sending errors are logged using the Python logging system (using logger
+name "graphyte"). If the sender is initialized with `log_sends=True`, all
+sends are logged at the INFO level.
 
 You can also use graphyte directly from the command line like so:
 
