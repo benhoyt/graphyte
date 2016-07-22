@@ -20,6 +20,8 @@ import time
 
 __all__ = ['Sender', 'init', 'send']
 
+__version__ = '1.0'
+
 default_sender = None
 logger = logging.getLogger(__name__)
 
