@@ -1,13 +1,13 @@
-graphyte
+# graphyte
 
-`graphyte` is a small Python library to send data to a Graphite metrics server
-(Carbon). We developed it at Jetsetter because the existing
+graphyte is a small Python library that sends data to a Graphite metrics
+server (Carbon). We wrote it because the existing
 [graphitesend](https://github.com/daniellawrence/graphitesend) library didn't
 support Python 3, and it also required gevent for asyncronous use.
 
-Using `graphyte` is simple -- just call `init()` to initialize the default
-sender and the `send()` to send a message. For example, to send
-`b'system.sync.foo.bar 42 {timestamp}\n'` to graphite.example.com:2003
+Using graphyte is simple -- just call `init()` to initialize the default
+sender and then `send()` to send a message. For example, to send
+`system.sync.foo.bar 42 {timestamp}` to graphite.example.com:2003
 synchronously:
 
 ```python
@@ -16,9 +16,9 @@ graphyte.init('graphite.example.com', prefix='system.sync')
 graphyte.send('foo.bar', 42)
 ```
 
-If you want to send asynchronously on a background thread (for example, from a
-web server), just specify a send interval. For example, this will setup a
-background thread to send every 10 seconds:
+If you want to send asynchronously on a background thread (for example, in a
+web server context), just specify a send interval. For example, this will
+setup a background thread to send every 10 seconds:
 
 ```python
 graphyte.init('graphite.example.com', prefix='system.async', interval=10)
@@ -38,14 +38,29 @@ sender1.send('foo.bar1', 42)
 sender2.send('foo.bar2', 43)
 ```
 
-You can also use `graphyte` directly from the command line like so:
+Or, to customize how messages are logged or sent to the socket, subclass
+`Sender` and override `send_socket`:
+
+```python
+class CustomSender(graphyte.Sender):
+    def send_socket(self, message):
+        print('Sending bytes in some custom way: {!r}'.format(message))
+```
+
+Socket sending errors are logged using the Python logging system (logged name
+"graphyte"). If the sender is initialized with `log_sends=True`, all sends are
+logged at the INFO level.
+
+You can also use graphyte directly from the command line like so:
 
     python -m graphyte foo.bar 42
 
 There are command line arguments to specify the server and port and other
 configuration. Type `python -m graphyte --help` for help.
 
-`graphyte` was written by [Ben Hoyt](http://benhoyt.com/) for
+Read the code for more details -- it's pretty small!
+
+graphyte was written by [Ben Hoyt](http://benhoyt.com/) for
 [Jetsetter](http://www.jetsetter.com/) and is licensed with a permissive MIT
 license (see
 [LICENSE.txt](https://github.com/Jetsetter/graphyte/blob/master/LICENSE.txt)).
