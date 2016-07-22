@@ -51,14 +51,15 @@ Socket sending errors are logged using the Python logging system (using logger
 name "graphyte"). If the sender is initialized with `log_sends=True`, all
 sends are logged at the INFO level.
 
-You can also use graphyte directly from the command line like so:
+You can also use graphyte to send metrics directly from the command line:
 
     python -m graphyte foo.bar 42
 
 There are command line arguments to specify the server and port and other
 configuration. Type `python -m graphyte --help` for help.
 
-Read the code for more details -- it's pretty small!
+Read the code in [graphyte.py](https://github.com/Jetsetter/graphyte/blob/master/graphyte.py)
+for more details -- it's pretty small!
 
 graphyte was written by [Ben Hoyt](http://benhoyt.com/) for
 [Jetsetter](http://www.jetsetter.com/) and is licensed with a permissive MIT
