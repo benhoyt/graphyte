@@ -1,33 +1,11 @@
 """Send data to Graphite metrics server (synchronously or on a background thread).
 
-Example synchronous usage:
---------------------------
+For example usage, see README.md.
 
-# Sends b'system.sync.foo.bar 42 {timestamp}\n' to graphite.example.com:2003
-import graphyte
-graphyte.init('graphite.example.com', prefix='system.sync')
-graphyte.send('foo.bar', 42)
+This code is licensed under a permissive MIT license -- see LICENSE.txt.
 
-
-Example asynchronous usage:
----------------------------
-
-# Sends b'system.async.foo.bar 42 {timestamp}\n' to graphite.example.com:2003
-# on background thread, sending every 10 seconds
-graphyte.init('graphite.example.com', prefix='system.async', interval=10)
-graphyte.send('foo.bar', 42)
-
-
-Example asynchronous usage with multiple senders:
--------------------------------------------------
-
-# Sends b'system.one.foo.bar1 42 {timestamp}\n' to graphite1.example.com:2003 and
-# b'system.two.foo.bar2 43 {timestamp}\n' to graphite2.example.com:2003
-sender1 = graphyte.Sender('graphite1.example.com', prefix='system.one')
-sender2 = graphyte.Sender('graphite2.example.com', prefix='system.two', interval=10)
-sender1.send('foo.bar1', 42)
-sender2.send('foo.bar2', 43)
-
+The graphyte project lives on GitHub here:
+https://github.com/Jetsetter/graphyte
 """
 
 import atexit
