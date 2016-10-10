@@ -45,12 +45,16 @@ sender1.send('foo.bar1', 42)
 sender2.send('foo.bar2', 43)
 ```
 
+If you want to send via UDP instead of TCP, just add `protocol='udp'` to the
+`init()` or `Sender()` call.
+
 Or, to customize how messages are logged or sent to the socket, subclass
-`Sender` and override `send_socket`:
+`Sender` and override `send_message` (or even `send_socket` if you want to
+override logging and exception handling):
 
 ```python
 class CustomSender(graphyte.Sender):
-    def send_socket(self, message):
+    def send_message(self, message):
         print('Sending bytes in some custom way: {!r}'.format(message))
 ```
 

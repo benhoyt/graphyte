@@ -28,7 +28,10 @@ class TestHandler(socketserver.BaseRequestHandler):
     messages = []
 
     def handle(self):
-        message = self.request.recv(1024)
+        if isinstance(self.request, tuple):
+            message, sock = self.request  # UDP
+        else:
+            message = self.request.recv(1024)  # TCP
         self.messages.append(message)
 
     @classmethod
@@ -79,7 +82,7 @@ class TestSynchronous(unittest.TestCase):
         self.assertTrue(send_time - 2 <= timestamp <= send_time + 2)
 
 
-class TestSendSocket(unittest.TestCase):
+class TestSendSocketTCP(unittest.TestCase):
     def setUp(self):
         self.server = socketserver.TCPServer(('127.0.0.1', 2003), TestHandler)
         self.server.timeout = 1.0
@@ -89,6 +92,24 @@ class TestSendSocket(unittest.TestCase):
 
     def test_send_socket(self):
         graphyte.init('127.0.0.1')
+        graphyte.send('foo', 42, timestamp=12345)
+        graphyte.send('bar', 43.5, timestamp=12346)
+        self.server.handle_request()
+        self.server.handle_request()
+        self.assertEqual(TestHandler.pop_message(), b'foo 42 12345\n')
+        self.assertEqual(TestHandler.pop_message(), b'bar 43.5 12346\n')
+
+
+class TestSendSocketUDP(unittest.TestCase):
+    def setUp(self):
+        self.server = socketserver.UDPServer(('127.0.0.1', 2003), TestHandler)
+        self.server.timeout = 1.0
+
+    def tearDown(self):
+        self.server.server_close()
+
+    def test_send_socket(self):
+        graphyte.init('127.0.0.1', protocol='udp')
         graphyte.send('foo', 42, timestamp=12345)
         graphyte.send('bar', 43.5, timestamp=12346)
         self.server.handle_request()

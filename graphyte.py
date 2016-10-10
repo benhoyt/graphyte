@@ -20,7 +20,7 @@ import time
 
 __all__ = ['Sender', 'init', 'send']
 
-__version__ = '1.0'
+__version__ = '1.1'
 
 default_sender = None
 logger = logging.getLogger(__name__)
@@ -28,10 +28,10 @@ logger = logging.getLogger(__name__)
 
 class Sender:
     def __init__(self, host, port=2003, prefix=None, timeout=5, interval=None,
-                 queue_size=None, log_sends=False):
+                 queue_size=None, log_sends=False, protocol='tcp'):
         """Initialize a Sender instance, starting the background thread to
         send messages at given interval (in seconds) if "interval" is not
-        None.
+        None. Default protocol is TCP; use protocol='udp' for UDP.
         """
         self.host = host
         self.port = port
@@ -39,6 +39,7 @@ class Sender:
         self.timeout = timeout
         self.interval = interval
         self.log_sends = log_sends
+        self.protocol = protocol
 
         if self.interval is not None:
             if queue_size is None:
@@ -95,6 +96,22 @@ class Sender:
             except queue.Full:
                 logger.error('queue full when sending {!r}'.format(message))
 
+    def send_message(self, message):
+        if self.protocol == 'tcp':
+            sock = socket.create_connection((self.host, self.port), self.timeout)
+            try:
+                sock.send(message)
+            finally:  # sockets don't support "with" statement on Python 2.x
+                sock.close()
+        elif self.protocol == 'udp':
+            sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            try:
+                sock.sendto(message, (self.host, self.port))
+            finally:
+                sock.close()
+        else:
+            raise ValueError('"protocol" must be \'tcp\' or \'udp\', not {!r}'.format(self.protocol))
+
     def send_socket(self, message):
         """Low-level function to send message bytes to this Sender's socket.
         You should usually call send() instead of this function (unless you're
@@ -103,9 +120,7 @@ class Sender:
         if self.log_sends:
             start_time = time.time()
         try:
-            conn = socket.create_connection((self.host, self.port), self.timeout)
-            conn.send(message)
-            conn.close()
+            self.send_message(message)
         except Exception as error:
             logger.error('error sending message {!r}: {}'.format(message, error))
         else:
@@ -184,6 +199,8 @@ if __name__ == '__main__':
                         help='hostname of Graphite server to send to, default %(default)s')
     parser.add_argument('-p', '--port', type=int, default=2003,
                         help='port to send message to, default %(default)d')
+    parser.add_argument('-u', '--udp', action='store_true',
+                        help='send via UDP instead of TCP')
     parser.add_argument('-t', '--timestamp', type=int,
                         help='Unix timestamp for message (defaults to current time)')
     parser.add_argument('-q', '--quiet', action='store_true',
@@ -193,5 +210,6 @@ if __name__ == '__main__':
     if not args.quiet:
         logging.basicConfig(level=logging.INFO, format='%(message)s')
 
-    sender = Sender(args.server, port=args.port, log_sends=not args.quiet)
+    sender = Sender(args.server, port=args.port, log_sends=not args.quiet,
+                    protocol='udp' if args.udp else 'tcp')
     sender.send(args.metric, args.value, timestamp=args.timestamp)
