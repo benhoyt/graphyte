@@ -7,7 +7,7 @@ didn’t support Python 3, and it also required gevent for asyncronous use.
 graphyte is compatible with Python 3.4+ as well as Python 2.7, and uses the
 standard library’s ``threading`` module for asynchronous use.
 
-The library is on the Python Package Index (PyPI), so to install it, fire up
+The library is `on the Python Package Index (PyPI)`_, so to install it, fire up
 a command prompt, activate your virtualenv if you’re using one, and type:
 
 ::
@@ -80,6 +80,7 @@ permissive MIT license (see `LICENSE.txt`_).
 
 
 .. _graphitesend: https://github.com/daniellawrence/graphitesend
+.. _on the Python Package Index (PyPI): https://pypi.python.org/pypi/graphyte
 .. _graphyte.py: https://github.com/Jetsetter/graphyte/blob/master/graphyte.py
 .. _Ben Hoyt: http://benhoyt.com/
 .. _Jetsetter: http://www.jetsetter.com/
