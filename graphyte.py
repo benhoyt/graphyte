@@ -1,6 +1,6 @@
 """Send data to Graphite metrics server (synchronously or on a background thread).
 
-For example usage, see README.md.
+For example usage, see README.rst.
 
 This code is licensed under a permissive MIT license -- see LICENSE.txt.
 
