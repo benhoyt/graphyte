@@ -16,6 +16,11 @@ with open(os.path.join(os.path.dirname(__file__), 'graphyte.py')) as f:
         raise Exception("Couldn't find __version__ line in graphyte.py")
 
 
+# Read long_description from README.rst
+with open(os.path.join(os.path.dirname(__file__), 'README.rst')) as f:
+    long_description = f.read()
+
+
 setup(
     name='graphyte',
     version=version,
@@ -24,7 +29,7 @@ setup(
     url='https://github.com/Jetsetter/graphyte',
     license='MIT License',
     description='Python 3 compatible library to send data to a Graphite metrics server (Carbon)',
-    long_description='See https://github.com/Jetsetter/graphyte for details and usage examples',
+    long_description=long_description,
     py_modules=['graphyte'],
     classifiers=[
         'Development Status :: 5 - Production/Stable',
