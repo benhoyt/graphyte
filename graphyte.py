@@ -99,6 +99,7 @@ class Sender:
     def send_message(self, message):
         if self.protocol == 'tcp':
             sock = socket.create_connection((self.host, self.port), self.timeout)
+            sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
             try:
                 sock.send(message)
             finally:  # sockets don't support "with" statement on Python 2.x
