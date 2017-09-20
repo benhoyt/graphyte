@@ -1,6 +1,14 @@
 graphyte
 ========
 
+.. image:: https://img.shields.io/pypi/v/graphyte.svg
+   :target: https://pypi.python.org/pypi/graphyte
+   :alt: graphyte on PyPI (Python Package Index)
+
+.. image:: https://travis-ci.org/Jetsetter/graphyte.svg?branch=master
+   :target: https://travis-ci.org/Jetsetter/graphyte
+   :alt: Travis CI tests
+
 graphyte is a small Python library that sends data to a Graphite metrics
 server (Carbon). We wrote it because the existing `graphitesend`_ library
 didn’t support Python 3, and it also required gevent for asyncronous use.
