@@ -7,7 +7,12 @@ graphyte
 
 .. image:: https://travis-ci.org/Jetsetter/graphyte.svg?branch=master
    :target: https://travis-ci.org/Jetsetter/graphyte
-   :alt: Travis CI tests
+   :alt: Travis CI tests (Linux)
+
+.. image:: https://ci.appveyor.com/api/projects/status/github/Jetsetter/graphyte?branch=master&svg=true
+   :target: https://ci.appveyor.com/project/benhoyt/graphyte
+   :alt: Appveyor tests (Windows)
+
 
 graphyte is a small Python library that sends data to a Graphite metrics
 server (Carbon). We wrote it because the existing `graphitesend`_ library
