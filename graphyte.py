@@ -28,7 +28,7 @@ logger = logging.getLogger(__name__)
 
 class Sender:
     def __init__(self, host, port=2003, prefix=None, timeout=5, interval=None,
-                 queue_size=None, log_sends=False, protocol='tcp'):
+                 queue_size=None, log_sends=False, protocol='tcp',send_batchsize=1000):
         """Initialize a Sender instance, starting the background thread to
         send messages at given interval (in seconds) if "interval" is not
         None. Default protocol is TCP; use protocol='udp' for UDP.
@@ -40,6 +40,7 @@ class Sender:
         self.interval = interval
         self.log_sends = log_sends
         self.protocol = protocol
+	self.send_batchsize = send_batchsize
 
         if self.interval is not None:
             if queue_size is None:
@@ -169,7 +170,12 @@ class Sender:
             if current_time - last_check_time >= self.interval:
                 last_check_time = current_time
                 if messages:
-                    self.send_socket(b''.join(messages))
+                    while messages:
+			batch_messages = []
+                        count_to_send = min(self.send_batchsize,len(messages))
+                        for x in range(count_to_send):
+                            batch_messages.append( messages.pop(0) )
+                        self.send_socket(b''.join(batch_messages))
                     messages = []
 
         # Send any final messages before exiting thread
