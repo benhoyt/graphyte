@@ -171,7 +171,7 @@ class Sender:
                 last_check_time = current_time
                 if messages:
                     while messages:
-			batch_messages = []
+                        batch_messages = []
                         count_to_send = min(self.send_batchsize,len(messages))
                         for x in range(count_to_send):
                             batch_messages.append( messages.pop(0) )
