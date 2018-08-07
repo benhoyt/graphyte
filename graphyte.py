@@ -40,7 +40,7 @@ class Sender:
         self.interval = interval
         self.log_sends = log_sends
         self.protocol = protocol
-	self.send_batchsize = send_batchsize
+        self.send_batchsize = send_batchsize
 
         if self.interval is not None:
             if queue_size is None:
