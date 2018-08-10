@@ -174,15 +174,21 @@ class Sender:
                     while messages:
                         count_to_send = min(self.batch_size, len(messages))
                         # Move batch from messages to batch 
-			batch = messages[0:count_to_send]
+                        batch = messages[0:count_to_send]
                         del messages[0:count_to_send]
-			# Send batch
-			self.send_socket(b''.join(batch))
+                        # Send batch
+                        self.send_socket(b''.join(batch))
                     messages = []
 
         # Send any final messages before exiting thread
         if messages:
-            self.send_socket(b''.join(messages))
+             while messages:
+                 count_to_send = min(self.batch_size, len(messages))
+                 # Move batch from messages to batch 
+                 batch = messages[0:count_to_send]
+                 del messages[0:count_to_send]
+                 # Send batch
+                 self.send_socket(b''.join(batch))
 
 
 def init(*args, **kwargs):
