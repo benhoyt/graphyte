@@ -157,7 +157,7 @@ class TestInterval(unittest.TestCase):
 
 class TestIntervalBatch(unittest.TestCase):
     def setUp(self):
-        self.sender = TestSender(interval=0.1,send_batchsize=5)
+        self.sender = TestSender(interval=0.1,batch_size=5)
 
     def tearDown(self):
         self.sender.stop()
