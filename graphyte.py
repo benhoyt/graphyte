@@ -172,11 +172,12 @@ class Sender:
                 last_check_time = current_time
                 if messages:
                     while messages:
-                        batch_messages = []
                         count_to_send = min(self.batch_size, len(messages))
-                        for x in range(count_to_send):
-                            batch_messages.append( messages.pop(0) )
-                        self.send_socket(b''.join(batch_messages))
+                        # Move batch from messages to batch 
+			batch = messages[0:count_to_send]
+                        del messages[0:count_to_send]
+			# Send batch
+			self.send_socket(b''.join(batch))
                     messages = []
 
         # Send any final messages before exiting thread
