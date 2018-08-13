@@ -31,7 +31,7 @@ class Sender:
                  queue_size=None, log_sends=False, protocol='tcp', batch_size=1000):
         """Initialize a Sender instance, starting the background thread to
         send messages at given interval (in seconds) if "interval" is not
-        None. Send at most "batch_size" messages per socket send operation. (default=1000).
+        None. Send at most "batch_size" messages per socket send operation (default=1000).
         Default protocol is TCP; use protocol='udp' for UDP.        
         """
         self.host = host
@@ -170,26 +170,15 @@ class Sender:
             current_time = time.time()
             if current_time - last_check_time >= self.interval:
                 last_check_time = current_time
-                if messages:
-                    while messages:
-                        count_to_send = min(self.batch_size, len(messages))
-                        # Move batch from messages to batch 
-                        batch = messages[0:count_to_send]
-                        del messages[0:count_to_send]
-                        # Send batch
+                for i in range(0, len(messages), self.batch_size):
+                        batch = messages[i:i + self.batch_size]
                         self.send_socket(b''.join(batch))
-                    messages = []
+                messages = []
 
         # Send any final messages before exiting thread
-        if messages:
-             while messages:
-                 count_to_send = min(self.batch_size, len(messages))
-                 # Move batch from messages to batch 
-                 batch = messages[0:count_to_send]
-                 del messages[0:count_to_send]
-                 # Send batch
-                 self.send_socket(b''.join(batch))
-
+        for i in range(0, len(messages), self.batch_size):
+            batch = messages[i:i + self.batch_size]
+            self.send_socket(b''.join(batch))
 
 def init(*args, **kwargs):
     """Initialize default Sender instance with given args."""
