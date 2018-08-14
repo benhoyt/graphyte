@@ -155,6 +155,29 @@ class TestInterval(unittest.TestCase):
         time.sleep(0.2)
         self.assertEqual(self.sender.pop_message(), b'buz 45 12348\n')
 
+class TestIntervalBatch(unittest.TestCase):
+    def setUp(self):
+        self.sender = TestSender(interval=0.1, batch_size=5)
+
+    def tearDown(self):
+        self.sender.stop()
+
+    def test_send_many_multiple(self):
+        self.sender.send('foo', 42, timestamp=12345)
+        self.sender.send('bar', 43, timestamp=12346)
+        self.sender.send('baz', 44, timestamp=12347)
+        self.sender.send('baz', 45, timestamp=12348)
+        self.sender.send('baz', 46, timestamp=12349)
+        self.sender.send('baz', 47, timestamp=12350)
+        time.sleep(0.2)
+        self.assertEqual(self.sender.pop_message(),
+                         b'foo 42 12345\nbar 43 12346\nbaz 44 12347\nbaz 45 12348\nbaz 46 12349\n')
+        self.assertEqual(self.sender.pop_message(),
+                         b'baz 47 12350\n')
+
+        self.sender.send('buz', 45, timestamp=12348)
+        time.sleep(0.2)
+        self.assertEqual(self.sender.pop_message(), b'buz 45 12348\n')
 
 if __name__ == '__main__':
     unittest.main()
