@@ -171,8 +171,8 @@ class Sender:
             if current_time - last_check_time >= self.interval:
                 last_check_time = current_time
                 for i in range(0, len(messages), self.batch_size):
-                        batch = messages[i:i + self.batch_size]
-                        self.send_socket(b''.join(batch))
+                   batch = messages[i:i + self.batch_size]
+                   self.send_socket(b''.join(batch))
                 messages = []
 
         # Send any final messages before exiting thread
