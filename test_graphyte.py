@@ -43,20 +43,20 @@ class TestHandler(socketserver.BaseRequestHandler):
 class TestBuildMessage(unittest.TestCase):
     def test_no_prefix(self):
         sender = TestSender()
-        self.assertEqual(sender.build_message('foo.bar', 42, 12345),
-                         b'foo.bar 42 12345\n', [])
-        self.assertEqual(sender.build_message('boo.far', 42.1, 12345.6),
-                         b'boo.far 42.1 12346\n', [])
+        self.assertEqual(sender.build_message('foo.bar', 42, 12345, []),
+                         b'foo.bar 42 12345\n')
+        self.assertEqual(sender.build_message('boo.far', 42.1, 12345.6, []),
+                         b'boo.far 42.1 12346\n')
 
     def test_unicode(self):
         sender = TestSender()
-        self.assertEqual(sender.build_message(u'\u201cfoo.bar\u201d', 42, 12345),
-                         b'\xe2\x80\x9cfoo.bar\xe2\x80\x9d 42 12345\n', [])
+        self.assertEqual(sender.build_message(u'\u201cfoo.bar\u201d', 42, 12345, []),
+                         b'\xe2\x80\x9cfoo.bar\xe2\x80\x9d 42 12345\n')
 
     def test_prefix(self):
         sender = TestSender(prefix='pr.efix')
-        self.assertEqual(sender.build_message('boo.far', 567, 12347),
-                         b'pr.efix.boo.far 567 12347\n', [])
+        self.assertEqual(sender.build_message('boo.far', 567, 12347, []),
+                         b'pr.efix.boo.far 567 12347\n')
 
     def test_exceptions(self):
         sender = TestSender()
