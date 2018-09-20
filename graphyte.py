@@ -64,31 +64,41 @@ class Sender:
             self._thread.join()
             self.interval = None
 
-    def build_message(self, metric, value, timestamp):
+    def build_message(self, metric, value, timestamp, tags):
         """Build a Graphite message to send and return it as a byte string."""
         if not metric or metric.split(None, 1)[0] != metric:
             raise ValueError('"metric" must not have whitespace in it')
         if not isinstance(value, (int, float)):
             raise TypeError('"value" must be an int or a float, not a {}'.format(
-                    type(value).__name__))
+                type(value).__name__))
+        if not (isinstance(tags, list) and all(isinstance(x, dict) for x in tags)):
+            raise TypeError('"tags" must be a list of dicts')
+        if not (all(all(isinstance(key, str) for key in tag.keys()) for tag in tags)):
+            raise TypeError('tag key must be an str')
 
-        message = u'{}{} {} {}\n'.format(
+        tags_suffix = ''
+        for tag in tags:
+            for key in tag.keys():
+              tags_suffix += ';{}={}'.format(key, tag[key])
+
+        message = u'{}{} {} {}{}\n'.format(
             self.prefix + '.' if self.prefix else '',
             metric,
             value,
             int(round(timestamp)),
+            tags_suffix
         )
         message = message.encode('utf-8')
         return message
 
-    def send(self, metric, value, timestamp=None):
+    def send(self, metric, value, timestamp=None, tags=[]):
         """Send given metric and (int or float) value to Graphite host.
         Performs send on background thread if "interval" was specified when
         creating this Sender.
         """
         if timestamp is None:
             timestamp = time.time()
-        message = self.build_message(metric, value, timestamp)
+        message = self.build_message(metric, value, timestamp, tags)
 
         if self.interval is None:
             self.send_socket(message)
