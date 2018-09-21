@@ -65,6 +65,20 @@ class TestBuildMessage(unittest.TestCase):
         with self.assertRaises(ValueError):
             sender.build_message('foo bar', 42, 12346)
 
+    def test_tagging_none(self):
+        sender = TestSender()
+        self.assertEqual(sender.build_message('tag.test', 42, 12345),
+                         b'tag.test 42 12345\n')
+
+    def test_tagging_single(self):
+        sender = TestSender()
+        self.assertEqual(sender.build_message('tag.test', 42, 12345, {'foo': 'bar'}),
+                         b'tag.test;foo=bar 42 12345\n')
+
+    def test_tagging_multi(self):
+        sender = TestSender()
+        self.assertEqual(sender.build_message('tag.test', 42, 12345, {'foo': 'bar', 'ding': 'dong'}),
+                         b'tag.test;foo=bar;ding=dong 42 12345\n')
 
 class TestSynchronous(unittest.TestCase):
     def test_timestamp_specified(self):
