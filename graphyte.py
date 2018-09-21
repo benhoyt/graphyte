@@ -81,12 +81,12 @@ class Sender:
             for key in tag.keys():
               tags_suffix += ';{}={}'.format(key, tag[key])
 
-        message = u'{}{} {} {}{}\n'.format(
+        message = u'{}{}{} {} {}\n'.format(
             self.prefix + '.' if self.prefix else '',
             metric,
+            tags_suffix,
             value,
-            int(round(timestamp)),
-            tags_suffix
+            int(round(timestamp))
         )
         message = message.encode('utf-8')
         return message
