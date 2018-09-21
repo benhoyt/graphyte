@@ -71,10 +71,9 @@ class Sender:
         if not isinstance(value, (int, float)):
             raise TypeError('"value" must be an int or a float, not a {}'.format(
                 type(value).__name__))
-        if not (isinstance(tags, list) and all(isinstance(x, dict) for x in tags)):
-            raise TypeError('"tags" must be a list of dicts')
-        if not (all(all(isinstance(key, str) for key in tag.keys()) for tag in tags)):
-            raise TypeError('tag key must be an str')
+        if not isinstance(tags, dict):
+            raise TypeError('"tags" must be a dict, not a {}'.format(
+                type(tags).__name__))
 
         tags_suffix = ''.join(';{}={}'.format(k, v) for k, v in tags.items())
 
