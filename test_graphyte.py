@@ -63,7 +63,7 @@ class TestBuildMessage(unittest.TestCase):
         with self.assertRaises(TypeError):
             sender.build_message('foo.bar', 'x', 12346)
         with self.assertRaises(ValueError):
-            sender.build_message('foo bar', 42, 12346, [])
+            sender.build_message('foo bar', 42, 12346)
 
 
 class TestSynchronous(unittest.TestCase):
