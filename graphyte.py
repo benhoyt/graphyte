@@ -64,7 +64,7 @@ class Sender:
             self._thread.join()
             self.interval = None
 
-    def build_message(self, metric, value, timestamp, tags):
+    def build_message(self, metric, value, timestamp, tags={}):
         """Build a Graphite message to send and return it as a byte string."""
         if not metric or metric.split(None, 1)[0] != metric:
             raise ValueError('"metric" must not have whitespace in it')
@@ -87,10 +87,12 @@ class Sender:
         message = message.encode('utf-8')
         return message
 
-    def send(self, metric, value, timestamp=None, tags=[]):
+    def send(self, metric, value, timestamp=None, tags={}):
         """Send given metric and (int or float) value to Graphite host.
         Performs send on background thread if "interval" was specified when
         creating this Sender.
+
+        If a "tags" dict is specified, send the tags to the Graphite host along with the metric.
         """
         if timestamp is None:
             timestamp = time.time()
