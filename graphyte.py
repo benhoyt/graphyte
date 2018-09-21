@@ -76,10 +76,7 @@ class Sender:
         if not (all(all(isinstance(key, str) for key in tag.keys()) for tag in tags)):
             raise TypeError('tag key must be an str')
 
-        tags_suffix = ''
-        for tag in tags:
-            for key in tag.keys():
-              tags_suffix += ';{}={}'.format(key, tag[key])
+        tags_suffix = ''.join(';{}={}'.format(k, v) for k, v in tags.items())
 
         message = u'{}{}{} {} {}\n'.format(
             self.prefix + '.' if self.prefix else '',
