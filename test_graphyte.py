@@ -78,7 +78,7 @@ class TestBuildMessage(unittest.TestCase):
     def test_tagging_multi(self):
         sender = TestSender()
         self.assertEqual(sender.build_message('tag.test', 42, 12345, {'foo': 'bar', 'ding': 'dong'}),
-                         b'tag.test;foo=bar;ding=dong 42 12345\n')
+                         b'tag.test;ding=dong;foo=bar 42 12345\n')
 
 class TestSynchronous(unittest.TestCase):
     def test_timestamp_specified(self):
