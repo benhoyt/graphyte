@@ -75,7 +75,7 @@ class Sender:
             raise TypeError('"tags" must be a dict, not a {}'.format(
                 type(tags).__name__))
 
-        tags_suffix = ''.join(';{}={}'.format(k, v) for k, v in tags.items())
+        tags_suffix = ''.join(';{}={}'.format(x[0], x[1]) for x in sorted(tags.items()))
 
         message = u'{}{}{} {} {}\n'.format(
             self.prefix + '.' if self.prefix else '',
