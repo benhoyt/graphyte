@@ -71,9 +71,6 @@ class Sender:
         if not isinstance(value, (int, float)):
             raise TypeError('"value" must be an int or a float, not a {}'.format(
                 type(value).__name__))
-        if not isinstance(tags, dict):
-            raise TypeError('"tags" must be a dict, not a {}'.format(
-                type(tags).__name__))
 
         tags_suffix = ''.join(';{}={}'.format(x[0], x[1]) for x in sorted(tags.items()))
 
