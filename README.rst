@@ -47,6 +47,12 @@ setup a background thread to send every 10 seconds:
     graphyte.init('graphite.example.com', prefix='system.async', interval=10)
     graphyte.send('foo.bar', 42)
 
+If you want to send tagged metrics, the usage is as follows:
+
+.. code:: python
+
+    graphite.send('foo.bar', 42, tags={'ding': 'dong'})
+
 For more advanced usage, for example if you want to send to multiple servers
 or if you want to subclass ``Sender``, you can instantiate instances of
 ``Sender`` directly. For example, to instantiate two senders sending to
