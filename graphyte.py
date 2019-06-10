@@ -72,7 +72,13 @@ class Sender:
             raise TypeError('"value" must be an int or a float, not a {}'.format(
                 type(value).__name__))
 
-        tags_suffix = ''.join(';{}={}'.format(x[0], x[1]) for x in sorted(tags.items()))
+        tags_suffix = ''
+
+        for x in sorted(tags.items()):
+            if not x[0] or str(x[0]).split(None, 1)[0] != str(x[0]) or not x[1] or str(x[1]).split(None, 1)[0] != str(x[1]):
+                raise ValueError('"tags" must not have whitespace in it')
+
+            tags_suffix += ';{}={}'.format(x[0], x[1])
 
         message = u'{}{}{} {} {}\n'.format(
             self.prefix + '.' if self.prefix else '',
