@@ -26,7 +26,11 @@ default_sender = None
 logger = logging.getLogger(__name__)
 
 def has_whitespace(value):
-    return not value or str(value).split(None, 1)[0] != str(value)
+    if type(value) == int:
+        value = str(value)
+    if type(value) == str:
+        value = value.encode('utf-8')
+    return not value or value.split(None, 1)[0] != value
 
 class Sender:
     def __init__(self, host, port=2003, prefix=None, timeout=5, interval=None,
