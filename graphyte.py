@@ -25,11 +25,8 @@ __version__ = '1.5'
 default_sender = None
 logger = logging.getLogger(__name__)
 
-def has_whitespace(value):
-    if type(value) == int:
-        value = str(value)
-    if type(value) == str:
-        value = value.encode('utf-8')
+def _has_whitespace(value):
+    value = value.encode('utf-8')    
     return not value or value.split(None, 1)[0] != value
 
 class Sender:
@@ -72,19 +69,16 @@ class Sender:
 
     def build_message(self, metric, value, timestamp, tags={}):
         """Build a Graphite message to send and return it as a byte string."""
-        if has_whitespace(metric):
+        if _has_whitespace(u'{}'.format(metric)):
             raise ValueError('"metric" must not have whitespace in it')
         if not isinstance(value, (int, float)):
             raise TypeError('"value" must be an int or a float, not a {}'.format(
                 type(value).__name__))
 
-        tags_suffix = ''
-
-        for x in sorted(tags.items()):
-            if has_whitespace(x[0]) or has_whitespace(x[1]):
-                raise ValueError('"tags" must not have whitespace in it')
-
-            tags_suffix += ';{}={}'.format(x[0], x[1])
+        tags_strs = [u';{}={}'.format(k, v) for k, v in sorted(tags.items())]
+        if any(_has_whitespace(t) for t in tags_strs):
+            raise ValueError('"tags" keys and values must not have whitespace in them')
+        tags_suffix = ''.join(tags_strs)
 
         message = u'{}{}{} {} {}\n'.format(
             self.prefix + '.' if self.prefix else '',
