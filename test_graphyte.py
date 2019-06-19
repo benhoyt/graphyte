@@ -68,8 +68,6 @@ class TestBuildMessage(unittest.TestCase):
             sender.build_message('foo.bar', 42, 123456, tags={'ab c': '123'})
         with self.assertRaises(ValueError):
             sender.build_message('foo.bar', 42, 123456, tags={'abc': '1 23'})
-        with self.assertRaises(ValueError):
-            sender.build_message({'dict':'value'}, 42, 123456, tags={'abc': '1 23'})
 
     def test_tagging_none(self):
         sender = TestSender()
