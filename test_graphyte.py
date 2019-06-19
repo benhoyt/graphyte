@@ -64,6 +64,12 @@ class TestBuildMessage(unittest.TestCase):
             sender.build_message('foo.bar', 'x', 12346)
         with self.assertRaises(ValueError):
             sender.build_message('foo bar', 42, 12346)
+        with self.assertRaises(ValueError):
+            sender.build_message('foo.bar', 42, 123456, tags={'ab c': '123'})
+        with self.assertRaises(ValueError):
+            sender.build_message('foo.bar', 42, 123456, tags={'abc': '1 23'})
+        with self.assertRaises(ValueError):
+            sender.build_message({'dict':'value'}, 42, 123456, tags={'abc': '1 23'})
 
     def test_tagging_none(self):
         sender = TestSender()
@@ -74,6 +80,16 @@ class TestBuildMessage(unittest.TestCase):
         sender = TestSender()
         self.assertEqual(sender.build_message('tag.test', 42, 12345, {'foo': 'bar'}),
                          b'tag.test;foo=bar 42 12345\n')
+    
+    def test_tagging_numeric_value(self):
+        sender = TestSender()
+        self.assertEqual(sender.build_message('tag.test', 42, 12345, {'foo': 123}),
+                         b'tag.test;foo=123 42 12345\n')
+
+    def test_tagging_unicode(self):
+        sender = TestSender()
+        self.assertEqual(sender.build_message('tag.test', 42, 12345, {u'\u201cfoo.bar\u201d': 123}),
+                         b'tag.test;\xe2\x80\x9cfoo.bar\xe2\x80\x9d=123 42 12345\n')
 
     def test_tagging_multi(self):
         sender = TestSender()
