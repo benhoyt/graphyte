@@ -5,11 +5,11 @@ graphyte
    :target: https://pypi.python.org/pypi/graphyte
    :alt: graphyte on PyPI (Python Package Index)
 
-.. image:: https://travis-ci.org/Jetsetter/graphyte.svg?branch=master
-   :target: https://travis-ci.org/Jetsetter/graphyte
+.. image:: https://travis-ci.org/benhoyt/graphyte.svg?branch=master
+   :target: https://travis-ci.org/benhoyt/graphyte
    :alt: Travis CI tests (Linux)
 
-.. image:: https://ci.appveyor.com/api/projects/status/github/Jetsetter/graphyte?branch=master&svg=true
+.. image:: https://ci.appveyor.com/api/projects/status/github/benhoyt/graphyte?branch=master&svg=true
    :target: https://ci.appveyor.com/project/benhoyt/graphyte
    :alt: Appveyor tests (Windows)
 
@@ -94,13 +94,12 @@ configuration. Type ``python -m graphyte --help`` for help.
 
 Read the code in `graphyte.py`_ for more details – it’s pretty small!
 
-graphyte was written by `Ben Hoyt`_ for `Jetsetter`_ and is licensed with a
+graphyte was written by `Ben Hoyt`_ and is licensed with a
 permissive MIT license (see `LICENSE.txt`_).
 
 
 .. _graphitesend: https://github.com/daniellawrence/graphitesend
 .. _on the Python Package Index (PyPI): https://pypi.python.org/pypi/graphyte
-.. _graphyte.py: https://github.com/Jetsetter/graphyte/blob/master/graphyte.py
+.. _graphyte.py: https://github.com/benhoyt/graphyte/blob/master/graphyte.py
 .. _Ben Hoyt: http://benhoyt.com/
-.. _Jetsetter: http://www.jetsetter.com/
-.. _LICENSE.txt: https://github.com/Jetsetter/graphyte/blob/master/LICENSE.txt
+.. _LICENSE.txt: https://github.com/benhoyt/graphyte/blob/master/LICENSE.txt

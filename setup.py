@@ -34,7 +34,7 @@ setup(
     version=version,
     author='Ben Hoyt',
     author_email='benhoyt@gmail.com',
-    url='https://github.com/Jetsetter/graphyte',
+    url='https://github.com/benhoyt/graphyte',
     license='MIT License',
     description='Python 3 compatible library to send data to a Graphite metrics server (Carbon)',
     long_description=long_description,
