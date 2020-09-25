@@ -9,7 +9,7 @@ graphyte
    :target: https://travis-ci.org/benhoyt/graphyte
    :alt: Travis CI tests (Linux)
 
-.. image:: https://ci.appveyor.com/api/projects/status/github/benhoyt/graphyte?branch=master&svg=true
+.. image:: https://ci.appveyor.com/api/projects/status/7eenjfojjgwtdni2?svg=true
    :target: https://ci.appveyor.com/project/benhoyt/graphyte
    :alt: Appveyor tests (Windows)
 
