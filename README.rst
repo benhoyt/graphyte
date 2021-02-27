@@ -17,7 +17,7 @@ graphyte
 graphyte is a small Python library that sends data to a Graphite metrics
 server (Carbon). We wrote it because the existing `graphitesend`_ library
 didn’t support Python 3, and it also required gevent for asyncronous use.
-graphyte is compatible with Python 3.4+ as well as Python 2.7, and uses the
+graphyte is tested on Python 3.5+ as well as Python 2.7, and uses the
 standard library’s ``threading`` module for asynchronous use.
 
 The library is `on the Python Package Index (PyPI)`_, so to install it, fire up
