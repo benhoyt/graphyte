@@ -19,7 +19,7 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Show Python version
-        run: python -c "import sys; print(sys.version)"
       - name: Run tests
-        run: python3 test_graphyte.py --verbose
+        run: |
+          python --version
+          python test_graphyte.py --verbose
