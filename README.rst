@@ -2,16 +2,12 @@ graphyte
 ========
 
 .. image:: https://img.shields.io/pypi/v/graphyte.svg
-   :target: https://pypi.python.org/pypi/graphyte
+   :target: https://pypi.org/project/graphyte/
    :alt: graphyte on PyPI (Python Package Index)
 
-.. image:: https://travis-ci.org/benhoyt/graphyte.svg?branch=master
-   :target: https://travis-ci.org/benhoyt/graphyte
-   :alt: Travis CI tests (Linux)
-
-.. image:: https://ci.appveyor.com/api/projects/status/7eenjfojjgwtdni2?svg=true
-   :target: https://ci.appveyor.com/project/benhoyt/graphyte
-   :alt: Appveyor tests (Windows)
+.. image:: https://github.com/benhoyt/graphyte/actions/workflows/tests.yml/badge.svg
+   :target: https://github.com/benhoyt/graphyte/actions/workflows/tests.yml
+   :alt: GitHub Actions Tests
 
 
 graphyte is a small Python library that sends data to a Graphite metrics
