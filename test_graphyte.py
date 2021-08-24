@@ -114,6 +114,18 @@ class TestBuildMessage(unittest.TestCase):
         self.assertEqual(sender.build_message('tag.test', 42, 12345, {'foo': 'bar', 'ding': 'dong'}),
                          b'tag.test;ding=dong;foo=bar;foobar=42;py=thon 42 12345\n')
 
+    def test_tagging_send_multiple(self):
+        sender1 = TestSender()
+        sender2 = TestSender()
+        sender1.send('test1a', 1, timestamp=11, tags={'foo1a': 'bar1a'})
+        sender2.send('test2a', 2, timestamp=22, tags={'foo2a': 'bar2a'})
+        sender1.send('test1b', 3, timestamp=33, tags={'foo1b': 'bar1b'})
+        sender2.send('test2b', 4, timestamp=44, tags={'foo2b': 'bar2b'})
+        self.assertEqual(sender1.messages,
+            [b'test1a;foo1a=bar1a 1 11\n', b'test1b;foo1b=bar1b 3 33\n'])
+        self.assertEqual(sender2.messages,
+            [b'test2a;foo2a=bar2a 2 22\n', b'test2b;foo2b=bar2b 4 44\n'])
+
 class TestSynchronous(unittest.TestCase):
     def test_timestamp_specified(self):
         sender = TestSender()

@@ -32,11 +32,15 @@ def _has_whitespace(value):
 
 class Sender:
     def __init__(self, host, port=2003, prefix=None, timeout=5, interval=None,
-                 queue_size=None, log_sends=False, protocol='tcp', batch_size=1000, tags={}):
+                 queue_size=None, log_sends=False, protocol='tcp',
+                 batch_size=1000, tags={}):
         """Initialize a Sender instance, starting the background thread to
         send messages at given interval (in seconds) if "interval" is not
-        None. Send at most "batch_size" messages per socket send operation (default=1000).
-        Default protocol is TCP; use protocol='udp' for UDP.        
+        None. Send at most "batch_size" messages per socket send operation.
+        Default protocol is TCP; use protocol='udp' for UDP.
+
+        Use "tags" to specify common or default tags for this Sender, which
+        are sent with each metric along with any tags passed to send().
         """
         self.host = host
         self.port = port
@@ -77,9 +81,9 @@ class Sender:
             raise TypeError('"value" must be an int or a float, not a {}'.format(
                 type(value).__name__))
 
-        default_tags = self.tags.copy()
-        default_tags.update(tags)
-        tags_strs = [u';{}={}'.format(k, v) for k, v in sorted(default_tags.items())]
+        all_tags = self.tags.copy()
+        all_tags.update(tags)
+        tags_strs = [u';{}={}'.format(k, v) for k, v in sorted(all_tags.items())]
         if any(_has_whitespace(t) for t in tags_strs):
             raise ValueError('"tags" keys and values must not have whitespace in them')
         tags_suffix = ''.join(tags_strs)
@@ -99,11 +103,13 @@ class Sender:
         Performs send on background thread if "interval" was specified when
         creating this Sender.
 
-        If a "tags" dict is specified, send the tags to the Graphite host along with the metric.
+        If a "tags" dict is specified, send the tags to the Graphite host along
+        with the metric, in addition to any default tags passed to Sender() --
+        the tags argument here overrides any default tags.
         """
         if timestamp is None:
             timestamp = time.time()
-        message = self.build_message(metric, value, timestamp, tags)
+        message = self.build_message(metric, value, timestamp, tags=tags)
 
         if self.interval is None:
             self.send_socket(message)
