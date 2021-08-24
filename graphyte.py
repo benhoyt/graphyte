@@ -32,7 +32,7 @@ def _has_whitespace(value):
 
 class Sender:
     def __init__(self, host, port=2003, prefix=None, timeout=5, interval=None,
-                 queue_size=None, log_sends=False, protocol='tcp', batch_size=1000):
+                 queue_size=None, log_sends=False, protocol='tcp', batch_size=1000, tags={}):
         """Initialize a Sender instance, starting the background thread to
         send messages at given interval (in seconds) if "interval" is not
         None. Send at most "batch_size" messages per socket send operation (default=1000).
@@ -46,6 +46,7 @@ class Sender:
         self.log_sends = log_sends
         self.protocol = protocol
         self.batch_size = batch_size
+        self.tags = tags
 
         if self.interval is not None:
             if queue_size is None:
@@ -76,7 +77,9 @@ class Sender:
             raise TypeError('"value" must be an int or a float, not a {}'.format(
                 type(value).__name__))
 
-        tags_strs = [u';{}={}'.format(k, v) for k, v in sorted(tags.items())]
+        default_tags = self.tags.copy()
+        default_tags.update(tags)
+        tags_strs = [u';{}={}'.format(k, v) for k, v in sorted(default_tags.items())]
         if any(_has_whitespace(t) for t in tags_strs):
             raise ValueError('"tags" keys and values must not have whitespace in them')
         tags_suffix = ''.join(tags_strs)

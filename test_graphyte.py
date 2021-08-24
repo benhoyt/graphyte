@@ -94,6 +94,26 @@ class TestBuildMessage(unittest.TestCase):
         self.assertEqual(sender.build_message('tag.test', 42, 12345, {'foo': 'bar', 'ding': 'dong'}),
                          b'tag.test;ding=dong;foo=bar 42 12345\n')
 
+    def test_tagging_default(self):
+        sender = TestSender(tags={'foo': 'bar'})
+        self.assertEqual(sender.build_message('tag.test', 42, 12345),
+                         b'tag.test;foo=bar 42 12345\n')
+
+    def test_tagging_override(self):
+        sender = TestSender(tags={'foo': 'bar', 'ding': 'dong'})
+        self.assertEqual(sender.build_message('tag.test', 42, 12345, {'foo': 'not-bar'}),
+                         b'tag.test;ding=dong;foo=not-bar 42 12345\n')
+
+    def test_tagging_default_no_overlap(self):
+        sender = TestSender(tags={'foo': 'bar'})
+        self.assertEqual(sender.build_message('tag.test', 42, 12345, {'ding': 'dong'}),
+                         b'tag.test;ding=dong;foo=bar 42 12345\n')
+
+    def test_tagging_default_multi(self):
+        sender = TestSender(tags={'foobar': 42, 'py': 'thon'})
+        self.assertEqual(sender.build_message('tag.test', 42, 12345, {'foo': 'bar', 'ding': 'dong'}),
+                         b'tag.test;ding=dong;foo=bar;foobar=42;py=thon 42 12345\n')
+
 class TestSynchronous(unittest.TestCase):
     def test_timestamp_specified(self):
         sender = TestSender()
