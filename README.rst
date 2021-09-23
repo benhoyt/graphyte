@@ -93,9 +93,14 @@ Read the code in `graphyte.py`_ for more details – it’s pretty small!
 graphyte was written by `Ben Hoyt`_ and is licensed with a
 permissive MIT license (see `LICENSE.txt`_).
 
+**Related work:** `delphid`_ has a fork of graphyte which supports the statsd
+protocol. See the changes on `delphid's branch`_.
+
 
 .. _graphitesend: https://github.com/daniellawrence/graphitesend
 .. _on the Python Package Index (PyPI): https://pypi.python.org/pypi/graphyte
 .. _graphyte.py: https://github.com/benhoyt/graphyte/blob/master/graphyte.py
 .. _Ben Hoyt: http://benhoyt.com/
 .. _LICENSE.txt: https://github.com/benhoyt/graphyte/blob/master/LICENSE.txt
+.. _delphid: https://github.com/delphid
+.. _delphid's branch: https://github.com/benhoyt/graphyte/compare/master...delphid:statsd_message_style?expand=1
