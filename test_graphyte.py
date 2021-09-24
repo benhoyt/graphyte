@@ -1,7 +1,6 @@
 """Unit tests for the graphyte module."""
 
 import re
-from unittest.mock import patch
 
 try:
     import socketserver
@@ -143,17 +142,28 @@ class TestSynchronous(unittest.TestCase):
         timestamp = int(match.group(1))
         self.assertTrue(send_time - 2 <= timestamp <= send_time + 2)
 
-    @patch('graphyte.Sender.send_message')
-    def test_send_socket_do_raise_error(self, mock_send_message):
-        mock_send_message.side_effect = ConnectionError()
-        sender = graphyte.Sender('dummy_host', raise_send_errors=True)
+    def test_send_socket_do_raise_error(self):
+
+        class SenderWithError(graphyte.Sender):
+            def __init__(self, *args, **kwargs):
+                graphyte.Sender.__init__(self, 'dummy_host', *args, **kwargs)
+
+            def send_message(self, message):
+                raise ConnectionError()
+
+        sender = SenderWithError('dummy_host', raise_send_errors=True)
         with self.assertRaises(ConnectionError):
             sender.send_socket('test')
 
-    @patch('graphyte.Sender.send_message')
-    def test_send_socket_do_not_raise_error(self, mock_send_message):
-        mock_send_message.side_effect = ConnectionError()
-        sender = graphyte.Sender('dummy_host',)
+    def test_send_socket_do_not_raise_error(self):
+        class SenderWithError(graphyte.Sender):
+            def __init__(self, *args, **kwargs):
+                graphyte.Sender.__init__(self, 'dummy_host', *args, **kwargs)
+
+            def send_message(self, message):
+                raise ConnectionError()
+
+        sender = SenderWithError('dummy_host')
         try:
             sender.send_socket('test')
         except ConnectionError:
