@@ -1,6 +1,8 @@
 """Unit tests for the graphyte module."""
 
 import re
+from unittest.mock import patch
+
 try:
     import socketserver
 except ImportError:
@@ -140,6 +142,27 @@ class TestSynchronous(unittest.TestCase):
         self.assertIsNotNone(match)
         timestamp = int(match.group(1))
         self.assertTrue(send_time - 2 <= timestamp <= send_time + 2)
+
+    @patch('graphyte.Sender.send_message')
+    def test_send_socket_do_raise_error(self, mock_send_message):
+        mock_send_message.side_effect = ConnectionError()
+        sender = graphyte.Sender('dummy_host', raise_send_errors=True)
+        with self.assertRaises(ConnectionError):
+            sender.send_socket('test')
+
+    @patch('graphyte.Sender.send_message')
+    def test_send_socket_do_not_raise_error(self, mock_send_message):
+        mock_send_message.side_effect = ConnectionError()
+        sender = graphyte.Sender('dummy_host',)
+        try:
+            sender.send_socket('test')
+        except ConnectionError:
+            self.fail('send_socket() raised an exception')
+
+    def test_sender_disable_raise_in_async(self):
+        sender = TestSender(interval=1)
+        self.assertFalse(sender.raise_send_errors)
+
 
 
 class TestSendSocketTCP(unittest.TestCase):
