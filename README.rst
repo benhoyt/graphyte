@@ -75,7 +75,10 @@ want to override logging and exception handling):
         def send_message(self, message):
             print('Sending bytes in some custom way: {!r}'.format(message))
 
-If you want to propagate exceptions when messages are sent, set ``raise_send_errors = True`` during initialization
+By default, exceptions that occur when sending a message are logged. If you
+want to raise and propagate exceptions instead, instantiate ``Sender`` with
+``raise_send_errors=True``. It's an error to set ``raise_send_errors`` when
+``interval`` is specified.
 
 Socket sending errors are logged using the Python logging system (using
 logger name “graphyte”). If the sender is initialized with

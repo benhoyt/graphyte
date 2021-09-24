@@ -143,30 +143,23 @@ class TestSynchronous(unittest.TestCase):
         self.assertTrue(send_time - 2 <= timestamp <= send_time + 2)
 
     def test_send_socket_do_raise_error(self):
-
         class SenderWithError(graphyte.Sender):
-            def __init__(self, *args, **kwargs):
-                graphyte.Sender.__init__(self, 'dummy_host', *args, **kwargs)
-
             def send_message(self, message):
-                raise ConnectionError()
+                raise RuntimeError()
 
         sender = SenderWithError('dummy_host', raise_send_errors=True)
-        with self.assertRaises(ConnectionError):
+        with self.assertRaises(RuntimeError):
             sender.send_socket('test')
 
     def test_send_socket_do_not_raise_error(self):
         class SenderWithError(graphyte.Sender):
-            def __init__(self, *args, **kwargs):
-                graphyte.Sender.__init__(self, 'dummy_host', *args, **kwargs)
-
             def send_message(self, message):
-                raise ConnectionError()
+                raise RuntimeError()
 
         sender = SenderWithError('dummy_host')
         try:
             sender.send_socket('test')
-        except ConnectionError:
+        except RuntimeError:
             self.fail('send_socket() raised an exception')
 
     def test_sender_disable_raise_in_async(self):
