@@ -162,10 +162,9 @@ class TestSynchronous(unittest.TestCase):
         except RuntimeError:
             self.fail('send_socket() raised an exception')
 
-    def test_sender_disable_raise_in_async(self):
-        sender = TestSender(interval=1)
-        self.assertFalse(sender.raise_send_errors)
-
+    def test_sender_disallow_interval_and_raise_send_errors(self):
+        with self.assertRaises(ValueError):
+            graphyte.Sender('test', interval=1, raise_send_errors=True)
 
 
 class TestSendSocketTCP(unittest.TestCase):
