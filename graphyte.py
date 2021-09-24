@@ -33,7 +33,7 @@ def _has_whitespace(value):
 class Sender:
     def __init__(self, host, port=2003, prefix=None, timeout=5, interval=None,
                  queue_size=None, log_sends=False, protocol='tcp',
-                 batch_size=1000, tags={}):
+                 batch_size=1000, tags={}, raise_send_errors=False):
         """Initialize a Sender instance, starting the background thread to
         send messages at given interval (in seconds) if "interval" is not
         None. Send at most "batch_size" messages per socket send operation.
@@ -42,6 +42,7 @@ class Sender:
         Use "tags" to specify common or default tags for this Sender, which
         are sent with each metric along with any tags passed to send().
         """
+
         self.host = host
         self.port = port
         self.prefix = prefix
@@ -51,8 +52,11 @@ class Sender:
         self.protocol = protocol
         self.batch_size = batch_size
         self.tags = tags
+        self.raise_send_errors = raise_send_errors
 
         if self.interval is not None:
+            if raise_send_errors:
+                raise ValueError('raise_send_errors must be disabled when interval is set')
             if queue_size is None:
                 queue_size = int(round(interval)) * 100
             self._queue = queue.Queue(maxsize=queue_size)
@@ -146,6 +150,8 @@ class Sender:
         try:
             self.send_message(message)
         except Exception as error:
+            if self.raise_send_errors:
+                raise
             logger.error('error sending message {!r}: {}'.format(message, error))
         else:
             if self.log_sends:
