@@ -20,7 +20,7 @@ import time
 
 __all__ = ['Sender', 'init', 'send']
 
-__version__ = '1.7.0'
+__version__ = '1.7.1'
 
 default_sender = None
 logger = logging.getLogger(__name__)
