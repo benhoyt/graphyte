@@ -3,7 +3,11 @@
 import os
 import re
 import sys
-from distutils.core import setup
+
+try:
+    from setuptools import setup
+except ImportError:
+    from distutils.core import setup
 
 
 # Read files as byte strings on Python 2.x, unicode strings on 3.x
